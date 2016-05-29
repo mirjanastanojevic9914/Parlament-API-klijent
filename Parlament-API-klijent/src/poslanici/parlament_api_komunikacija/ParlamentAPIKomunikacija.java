@@ -14,21 +14,22 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import poslanici.poslanik.*;
+import poslanici.poslanik.Poslanik;
 
 
 public class ParlamentAPIKomunikacija {
-	
+
 	private static final String membersURL = "http://147.91.128.71:9090/parlament/api/members";
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
-	
-	public static List <Poslanik> vratiPoslanike(){
+	private static final SimpleDateFormat sdf = new SimpleDateFormat(
+			"dd.MM.yyyy.");
+
+	public static List<Poslanik> vratiPoslanike() {
 		List<Poslanik> poslanici = new LinkedList<Poslanik>();
-		try{
+		try {
 			String result = sendGet(membersURL);
 			Gson gson = new GsonBuilder().create();
 			JsonArray membersJson = gson.fromJson(result, JsonArray.class);
-			
+
 			for (int i = 0; i < membersJson.size(); i++) {
 				JsonObject memberJson = (JsonObject) membersJson.get(i);
 
@@ -37,21 +38,21 @@ public class ParlamentAPIKomunikacija {
 				p.setIme(memberJson.get("name").getAsString());
 				p.setPrezime(memberJson.get("lastName").getAsString());
 				if (memberJson.get("birthDate") != null)
-					p.setDatumRodjenja(sdf.parse(memberJson.get("birthDate").getAsString()));
+					p.setDatumRodjenja(sdf.parse(memberJson.get("birthDate")
+							.getAsString()));
 
 				poslanici.add(p);
 			}
-			
-			
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return poslanici;
 	}
-	
+
 	public static JsonArray vratiPoslanikeJSon() throws Exception {
-		return new GsonBuilder().setPrettyPrinting().create().fromJson(sendGet(membersURL), JsonArray.class);
+		return new GsonBuilder().setPrettyPrinting().create()
+				.fromJson(sendGet(membersURL), JsonArray.class);
 	}
 
 	private static String sendGet(String url) throws IOException {
@@ -60,7 +61,8 @@ public class ParlamentAPIKomunikacija {
 
 		con.setRequestMethod("GET");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
 
 		boolean endReading = false;
 		String response = "";
@@ -77,6 +79,33 @@ public class ParlamentAPIKomunikacija {
 		in.close();
 
 		return response.toString();
+	}
+
+	public static JsonArray prebaciUJsonNiz(List<Poslanik> poslanici) {
+		
+		JsonArray jsonArray = new JsonArray();
+		JsonObject jsonObject = null;
+
+		for (int i = 0; i < poslanici.size(); i++) {
+			Poslanik pos = poslanici.get(i);
+
+			jsonObject = new JsonObject();
+			jsonObject.addProperty("id", pos.getId());
+			jsonObject.addProperty("name", pos.getIme());
+			jsonObject.addProperty("lastName", pos.getPrezime());
+			
+			try {
+				jsonObject.addProperty("birthDate",
+						sdf.format(pos.getDatumRodjenja()));
+			} catch (Exception e) {
+				jsonObject.addProperty("birthDate", "nn");
+			}
+
+			jsonArray.add(jsonObject);
+
+		}
+
+		return jsonArray;
 	}
 
 }

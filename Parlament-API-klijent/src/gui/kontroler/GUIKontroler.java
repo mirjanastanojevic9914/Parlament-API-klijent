@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -109,6 +110,24 @@ public class GUIKontroler {
 		}
 
 		return poslanici;
+	}
+	
+	public static void updateMembers(){
+		PoslanikTableModel model = (PoslanikTableModel) glavniProzor.getTable().getModel();
+		List<Poslanik> poslanici = model.getPoslanici();
+		JsonArray jsonArray = ParlamentAPIKomunikacija.prebaciUJsonNiz(poslanici);
+		try{
+            PrintWriter o = new PrintWriter(new BufferedWriter(new FileWriter("data/updatedMembers.json")));
+			
+			o.println(new GsonBuilder().setPrettyPrinting().create().toJson(jsonArray));
+			
+			o.close();
+			ispisi("Izvrsene su izmene");
+		} catch(IOException e){
+			JOptionPane.showMessageDialog(glavniProzor, "Greska pri ucitavanju", "Greska",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		
 	}
 	
 }
