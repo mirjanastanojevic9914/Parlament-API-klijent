@@ -1,5 +1,7 @@
 package gui;
 
+import gui.kontroler.GUIKontroler;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -7,14 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
+
 import java.awt.Dimension;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
+
 import java.awt.Color;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GlavniProzor extends JFrame {
 
@@ -30,7 +39,7 @@ public class GlavniProzor extends JFrame {
 	private JTable table;
 
 	/**
-	 * Launch the application.
+	 * Create the frame.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -44,10 +53,6 @@ public class GlavniProzor extends JFrame {
 			}
 		});
 	}
-
-	/**
-	 * Create the frame.
-	 */
 	public GlavniProzor() {
 		setTitle("Parlament Members");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,6 +79,11 @@ public class GlavniProzor extends JFrame {
 	private JButton getBtnGetMembers() {
 		if (btnGetMembers == null) {
 			btnGetMembers = new JButton("Get members");
+			btnGetMembers.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GUIKontroler.vratiPoslanikeUJsonFormatu();
+				}
+			});
 			btnGetMembers.setPreferredSize(new Dimension(125, 25));
 		}
 		return btnGetMembers;
@@ -81,6 +91,11 @@ public class GlavniProzor extends JFrame {
 	private JButton getBtnFillTable() {
 		if (btnFillTable == null) {
 			btnFillTable = new JButton("Fill table");
+			btnFillTable.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GUIKontroler.popuniTabelu();
+				}
+			});
 			btnFillTable.setPreferredSize(new Dimension(125, 25));
 		}
 		return btnFillTable;
@@ -108,7 +123,7 @@ public class GlavniProzor extends JFrame {
 		}
 		return scrollPane;
 	}
-	private JTextArea getTextArea() {
+	public JTextArea getTextArea() {
 		if (textArea == null) {
 			textArea = new JTextArea();
 			textArea.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 1, true), "STATUS", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -122,7 +137,7 @@ public class GlavniProzor extends JFrame {
 		}
 		return scrollPane_1;
 	}
-	private JTable getTable() {
+	public JTable getTable() {
 		if (table == null) {
 			table = new JTable();
 			table.setModel(new DefaultTableModel(
