@@ -1,6 +1,7 @@
 package gui;
 
 import gui.kontroler.GUIKontroler;
+import gui.table_model.PoslanikTableModel;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -145,13 +146,7 @@ public class GlavniProzor extends JFrame {
 	public JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"ID", "Name", "Last name", "Birth date"
-				}
-			));
+			table.setModel(new PoslanikTableModel());
 			table.setFillsViewportHeight(true);
 		}
 		return table;

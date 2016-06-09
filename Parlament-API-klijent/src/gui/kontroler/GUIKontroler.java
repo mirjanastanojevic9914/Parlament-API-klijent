@@ -62,7 +62,8 @@ public class GUIKontroler {
 			
 		} catch(Exception e){
 			
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(glavniProzor, "Doslo je do greske prilikom ucitavanja poslanika!", "Greska",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	

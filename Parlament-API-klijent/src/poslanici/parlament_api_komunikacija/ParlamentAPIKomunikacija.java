@@ -51,8 +51,7 @@ public class ParlamentAPIKomunikacija {
 	}
 
 	public static JsonArray vratiPoslanikeJSon() throws Exception {
-		return new GsonBuilder().setPrettyPrinting().create()
-				.fromJson(sendGet(membersURL), JsonArray.class);
+		return new GsonBuilder().setPrettyPrinting().create().fromJson(sendGet(membersURL), JsonArray.class);
 	}
 
 	private static String sendGet(String url) throws IOException {
